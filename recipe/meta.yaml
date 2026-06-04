@@ -8,9 +8,20 @@ package:
 source:
   - url: https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-{{ version }}.tar.gz
     sha256: 9905d9341f20388adb852c77dd982f2c4d539fd68e6c1f1bcebf034715f2d1d5
+    patches:
+      # Backport SPV_INTEL_predicated_io: adds OpPredicatedLoadINTEL /
+      # OpPredicatedStoreINTEL (6258/6259), required to build
+      # SPIRV-LLVM-Translator 16.0.25.  The PR was authored directly on top of
+      # vulkan-sdk-1.4.350.0, so the patch applies cleanly.
+      # Pull request: https://github.com/KhronosGroup/SPIRV-Headers/pull/585
+      # Merged to main as commit b8a32968473ce852a809b9de5f04f02a5a9dfa78:
+      # https://github.com/KhronosGroup/SPIRV-Headers/commit/b8a32968473ce852a809b9de5f04f02a5a9dfa78
+      # Lives on the main branch: https://github.com/KhronosGroup/SPIRV-Headers/tree/main
+      # Drop this patch once a vulkan-sdk-* release includes the extension.
+      - patches/0001-SPV_INTEL_predicated_io.patch
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
